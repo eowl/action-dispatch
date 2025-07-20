@@ -1,7 +1,130 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "action-dispatch"
-version = "0.1.0"
-description = "Add your description here"
+dynamic = ["version"]
+description = "A flexible action dispatching system with multi-dimensional routing capabilities"
 readme = "README.md"
-requires-python = ">=3.12"
+license = "MIT"
+requires-python = ">=3.8"
+authors = [
+    {name = "eowl", email = "eowl@me.com"},
+]
+maintainers = [
+    {name = "eowl", email = "eowl@me.com"},
+]
+keywords = [
+    "dispatch",
+    "routing", 
+    "action",
+    "handler",
+    "middleware",
+    "framework",
+    "multi-dimensional",
+    "context-based"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: System :: Systems Administration",
+    "Typing :: Typed",
+]
 dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "coverage>=7.0",
+    "black>=22.0",
+    "flake8>=5.0",
+    "mypy>=1.0",
+    "pre-commit>=2.20",
+]
+docs = [
+    "sphinx>=5.0",
+    "sphinx-rtd-theme>=1.0",
+    "myst-parser>=0.18",
+]
+
+[project.urls]
+Homepage = "https://github.com/eowl/action-dispatch"
+Documentation = "https://action-dispatch.readthedocs.io"
+Repository = "https://github.com/eowl/action-dispatch.git"
+"Bug Tracker" = "https://github.com/eowl/action-dispatch/issues"
+Changelog = "https://github.com/eowl/action-dispatch/blob/main/CHANGELOG.md"
+
+[tool.hatch.version]
+path = "action_dispatch/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["action_dispatch"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.coverage.run]
+source = ["action_dispatch"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.mypy]
+python_version = "3.8"
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+[dependency-groups]
+dev = [
+    "build>=1.2.2.post1",
+    "twine>=6.1.0",
+]
