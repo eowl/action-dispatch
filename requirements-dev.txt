@@ -1,0 +1,22 @@
+# Development dependencies for action-dispatch
+# Install with: pip install -r requirements-dev.txt
+
+# Code formatting and linting
+black>=22.0
+flake8>=5.0
+mypy>=1.0
+
+# Testing and coverage
+coverage>=7.0
+
+# Build and packaging
+build>=1.2.2.post1
+twine>=6.1.0
+
+# Pre-commit hooks
+pre-commit>=2.20
+
+# Documentation (optional)
+sphinx>=5.0
+sphinx-rtd-theme>=1.0
+myst-parser>=0.18

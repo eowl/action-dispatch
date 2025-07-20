@@ -1,0 +1,8 @@
+black==25.1.0
+build==1.2.2.post1
+coverage==7.9.2
+flake8==7.3.0
+mypy==1.17.0
+mypy-extensions==1.1.0
+pre-commit==4.2.0
+twine==6.1.0
