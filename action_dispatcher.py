@@ -2,7 +2,10 @@ from functools import partial
 from collections import defaultdict
 import warnings
 
-from .exceptions import InvalidDimensionError, HandlerNotFoundError, InvalidActionError
+try:
+    from .exceptions import InvalidDimensionError, HandlerNotFoundError, InvalidActionError
+except ImportError:
+    from exceptions import InvalidDimensionError, HandlerNotFoundError, InvalidActionError
 
 class ActionDispatcher:
     def __init__(self, dimensions=None):
