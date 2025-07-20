@@ -9,13 +9,9 @@ A powerful and flexible Python library for multi-dimensional action dispatching.
 
 ## Features
 
-🚀 **Multi-dimensional Routing** - Dispatch based on multiple context attributes simultaneously  
-🎯 **Dynamic Handler Registration** - Register handlers using decorators or programmatically  
-🔧 **Flexible Context Matching** - Support for exact matches and fallback strategies  
-⚡ **High Performance** - Efficient handler lookup even with thousands of registered handlers  
-🛡️ **Type Safe** - Custom exception classes for better error handling  
-📝 **Well Documented** - Comprehensive documentation and examples  
-🧪 **Fully Tested** - 100% test coverage with extensive test suite  
+**Multi-dimensional Routing** - Dispatch based on multiple context attributes simultaneously  
+**Dynamic Handler Registration** - Register handlers using decorators or programmatically  
+**Flexible Context Matching** - Support for exact matches and fallback strategies  
 
 ## Installation
 

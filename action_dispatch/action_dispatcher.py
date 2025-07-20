@@ -1,6 +1,7 @@
 from functools import partial
 from collections import defaultdict
 import warnings
+from typing import Any, Callable, Dict, List, Optional, Union
 
 try:
     from .exceptions import (
@@ -9,15 +10,15 @@ try:
         InvalidActionError,
     )
 except ImportError:
-    from exceptions import (
-        InvalidDimensionError,
-        HandlerNotFoundError,
-        InvalidActionError,
-    )
+    pass
 
 
 class ActionDispatcher:
-    def __init__(self, dimensions=None):
+    dimensions: List[str]
+    registry: Dict[str, Any]
+    global_handlers: Dict[str, Callable[[Dict[str, Any]], Any]]
+
+    def __init__(self, dimensions: Optional[List[str]] = None) -> None:
         if dimensions is not None and not isinstance(dimensions, list):
             warnings.warn(
                 f"ActionDispatcher dimensions should be a list, got {type(dimensions).__name__}. Setting to empty list."
@@ -31,16 +32,26 @@ class ActionDispatcher:
 
         self._create_dynamic_methods()
 
-    def _create_nested_dict(self, depth):
+    def _create_nested_dict(
+        self, depth: int
+    ) -> Union[Dict[str, Any], defaultdict[str, Any]]:
         if depth == 0:
             return {}
 
         return defaultdict(partial(self._create_nested_dict, depth - 1))
 
-    def _create_dynamic_methods(self):
-        def decorator_factory(dimensions):
-            def decorator(action, **scope_kwargs):
-                def wrapper(func):
+    def _create_dynamic_methods(self) -> None:
+        def decorator_factory(
+            dimensions: List[str],
+        ) -> Callable[[str], Callable[..., Callable[..., Any]]]:
+            def decorator(
+                action: str, **scope_kwargs: Any
+            ) -> Callable[
+                [Callable[[Dict[str, Any]], Any]], Callable[[Dict[str, Any]], Any]
+            ]:
+                def wrapper(
+                    func: Callable[[Dict[str, Any]], Any],
+                ) -> Callable[[Dict[str, Any]], Any]:
                     for key in scope_kwargs:
                         if key not in dimensions:
                             raise InvalidDimensionError(key, dimensions)
@@ -52,8 +63,12 @@ class ActionDispatcher:
 
             return decorator
 
-        def register_factory(dimensions):
-            def register(action, handler, **scope_kwargs):
+        def register_factory(dimensions: List[str]) -> Callable[..., None]:
+            def register(
+                action: str,
+                handler: Callable[[Dict[str, Any]], Any],
+                **scope_kwargs: Any,
+            ) -> None:
                 for key in scope_kwargs:
                     if key not in dimensions:
                         raise InvalidDimensionError(key, dimensions)
@@ -61,8 +76,12 @@ class ActionDispatcher:
 
             return register
 
-        def get_handler_factory(dimensions):
-            def get_handler(action, **scope_kwargs):
+        def get_handler_factory(
+            dimensions: List[str],
+        ) -> Callable[..., Optional[Callable[[Dict[str, Any]], Any]]]:
+            def get_handler(
+                action: str, **scope_kwargs: Any
+            ) -> Optional[Callable[[Dict[str, Any]], Any]]:
                 for key in scope_kwargs:
                     if key not in dimensions:
                         raise InvalidDimensionError(key, dimensions)
@@ -76,8 +95,13 @@ class ActionDispatcher:
         self.get_handler = get_handler_factory(self.dimensions)
         self.on = self.handler
 
-    def _register_handler(self, action, handler, scope_kwargs):
-        current_level = self.registry
+    def _register_handler(
+        self,
+        action: str,
+        handler: Callable[[Dict[str, Any]], Any],
+        scope_kwargs: Dict[str, Any],
+    ) -> None:
+        current_level: Any = self.registry
 
         for i, dim_name in enumerate(self.dimensions):
             dim_value = scope_kwargs.get(dim_name)
@@ -92,13 +116,15 @@ class ActionDispatcher:
 
         current_level[action] = handler
 
-    def _find_handler(self, action, scope_kwargs):
+    def _find_handler(
+        self, action: str, scope_kwargs: Dict[str, Any]
+    ) -> Optional[Callable[[Dict[str, Any]], Any]]:
         if action in self.global_handlers:
             return self.global_handlers[action]
         if not self.dimensions:
             return self.registry.get(action)
 
-        current_level = self.registry
+        current_level: Any = self.registry
         handler = None
 
         for i, dim_name in enumerate(self.dimensions):
@@ -119,18 +145,24 @@ class ActionDispatcher:
 
         return handler
 
-    def register_global(self, action, handler):
+    def register_global(
+        self, action: str, handler: Callable[[Dict[str, Any]], Any]
+    ) -> None:
         self.global_handlers[action] = handler
 
-    def global_handler(self, action):
-        def decorator(func):
+    def global_handler(
+        self, action: str
+    ) -> Callable[[Callable[[Dict[str, Any]], Any]], Callable[[Dict[str, Any]], Any]]:
+        def decorator(
+            func: Callable[[Dict[str, Any]], Any],
+        ) -> Callable[[Dict[str, Any]], Any]:
             self.register_global(action, func)
 
             return func
 
         return decorator
 
-    def dispatch(self, context_object, action_name, **kwargs):
+    def dispatch(self, context_object: Any, action_name: str, **kwargs: Any) -> Any:
         if not action_name:
             raise InvalidActionError()
 
@@ -144,7 +176,7 @@ class ActionDispatcher:
 
         return handler(params)
 
-    def _build_rules(self, context_object):
+    def _build_rules(self, context_object: Any) -> Dict[str, Any]:
         rules = {}
         for dim in self.dimensions:
             if hasattr(context_object, dim):
@@ -152,5 +184,5 @@ class ActionDispatcher:
 
         return rules
 
-    def _build_params(self, context_object, **kwargs):
+    def _build_params(self, context_object: Any, **kwargs: Any) -> Dict[str, Any]:
         return {"context_object": context_object, **kwargs}
