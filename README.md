@@ -15,6 +15,8 @@ A powerful and flexible Python library for multi-dimensional action dispatching.
 
 ## Installation
 
+**Requirements:** Python 3.9+
+
 ```bash
 pip install action-dispatch
 ```
@@ -302,11 +304,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 See [CHANGELOG.md](CHANGELOG.md) for a list of changes and releases.
 
-## Support
+<!-- ## Support
 
 - 📖 [Documentation](https://action-dispatch.readthedocs.io)
 - 🐛 [Issue Tracker](https://github.com/eowl/action-dispatch/issues)
-- 💬 [Discussions](https://github.com/eowl/action-dispatch/discussions)
+- 💬 [Discussions](https://github.com/eowl/action-dispatch/discussions) -->
 
 ## Acknowledgments
 
