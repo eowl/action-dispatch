@@ -7,7 +7,7 @@ This document explains how to run tests for the action-dispatch library.
 The tests are organized into several modules:
 
 - `test_action_dispatcher.py` - Core functionality tests
-- `test_exceptions.py` - Exception class tests  
+- `test_exceptions.py` - Exception class tests
 - `test_integration.py` - Integration and real-world scenario tests
 - `test_config.py` - Test configuration and utilities
 
@@ -26,7 +26,7 @@ python -m tests.run_tests
 # Run only core ActionDispatcher tests
 python -m tests.run_tests test_action_dispatcher
 
-# Run only exception tests  
+# Run only exception tests
 python -m tests.run_tests test_exceptions
 
 # Run only integration tests
@@ -102,16 +102,16 @@ from exceptions import HandlerNotFoundError
 class MyCustomTest(unittest.TestCase):
     def setUp(self):
         self.dispatcher = ActionDispatcher(['role', 'environment'])
-    
+
     def test_my_scenario(self):
         @self.dispatcher.handler("my_action", role="admin")
         def my_handler(params):
             return "success"
-        
+
         class MockContext:
             role = "admin"
             environment = "production"
-        
+
         result = self.dispatcher.dispatch(MockContext(), "my_action")
         self.assertEqual(result, "success")
 ```

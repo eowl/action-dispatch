@@ -17,7 +17,7 @@ maintainers = [
 ]
 keywords = [
     "dispatch",
-    "routing", 
+    "routing",
     "action",
     "handler",
     "middleware",
@@ -49,6 +49,7 @@ dev = [
     "coverage>=7.0",
     "black>=22.0",
     "flake8>=5.0",
+    "isort>=5.0",
     "mypy>=1.0",
     "pre-commit>=2.20",
 ]
@@ -125,5 +126,6 @@ disallow_untyped_defs = false
 [dependency-groups]
 dev = [
     "build>=1.2.2.post1",
+    "isort>=5.0",
     "twine>=6.1.0",
 ]
