@@ -9,9 +9,9 @@ A powerful and flexible Python library for multi-dimensional action dispatching.
 
 ## Features
 
-**Multi-dimensional Routing** - Dispatch based on multiple context attributes simultaneously  
-**Dynamic Handler Registration** - Register handlers using decorators or programmatically  
-**Flexible Context Matching** - Support for exact matches and fallback strategies  
+**Multi-dimensional Routing** - Dispatch based on multiple context attributes simultaneously
+**Dynamic Handler Registration** - Register handlers using decorators or programmatically
+**Flexible Context Matching** - Support for exact matches and fallback strategies
 
 ## Installation
 
@@ -34,7 +34,7 @@ dispatcher = ActionDispatcher(['role', 'environment'])
 def admin_create_user(params):
     return f"Admin creating user: {params.get('username')}"
 
-@dispatcher.handler("create_user", role="manager")  
+@dispatcher.handler("create_user", role="manager")
 def manager_create_user(params):
     return f"Manager creating user: {params.get('username')}"
 
@@ -57,15 +57,15 @@ print(result)  # "Admin creating user: john"
 ```python
 dispatcher = ActionDispatcher(['role', 'environment', 'feature_flag'])
 
-@dispatcher.handler("process_payment", 
-                   role="admin", 
-                   environment="production", 
+@dispatcher.handler("process_payment",
+                   role="admin",
+                   environment="production",
                    feature_flag="new_payment_system")
 def new_payment_handler(params):
     return "Processing with new payment system"
 
-@dispatcher.handler("process_payment", 
-                   role="admin", 
+@dispatcher.handler("process_payment",
+                   role="admin",
                    environment="production")
 def default_payment_handler(params):
     return "Processing with default system"
@@ -132,7 +132,7 @@ def get_users_admin_v2(params):
         "permissions": ["read", "write", "delete"]
     }
 
-@api_dispatcher.handler("get_users", role="user", api_version="v2") 
+@api_dispatcher.handler("get_users", role="user", api_version="v2")
 def get_users_regular_v2(params):
     return {
         "users": get_user_own_data(params['context_object']),
@@ -143,7 +143,7 @@ def get_users_regular_v2(params):
 def api_get_users(request):
     try:
         result = api_dispatcher.dispatch(
-            request.user, 
+            request.user,
             "get_users",
             request_id=request.id
         )
@@ -157,14 +157,14 @@ def api_get_users(request):
 ```python
 service_dispatcher = ActionDispatcher(['environment', 'service_version'])
 
-@service_dispatcher.handler("process_order", 
-                           environment="production", 
+@service_dispatcher.handler("process_order",
+                           environment="production",
                            service_version="v2")
 def process_order_prod_v2(params):
     # Use production database and new algorithm
     return production_order_processor.process(params['order_data'])
 
-@service_dispatcher.handler("process_order", 
+@service_dispatcher.handler("process_order",
                            environment="staging")
 def process_order_staging(params):
     # Use staging database with verbose logging
@@ -177,8 +177,8 @@ def process_order_staging(params):
 plugin_dispatcher = ActionDispatcher(['plugin_type', 'version'])
 
 # Plugins can register their handlers
-@plugin_dispatcher.handler("transform_data", 
-                          plugin_type="image_processor", 
+@plugin_dispatcher.handler("transform_data",
+                          plugin_type="image_processor",
                           version="2.0")
 def image_transform_v2(params):
     return enhanced_image_transform(params['data'])
@@ -214,7 +214,7 @@ Decorator to register a global handler that works across all contexts.
 #### `register(action, handler, **kwargs)`
 Programmatically register a handler.
 
-- `action` (str): Action name  
+- `action` (str): Action name
 - `handler` (callable): Handler function
 - `**kwargs`: Dimension values for routing
 
@@ -276,7 +276,7 @@ python -m unittest tests.test_action_dispatcher.TestActionDispatcher -v
 # Format code
 black action_dispatch tests
 
-# Lint code  
+# Lint code
 flake8 action_dispatch tests
 
 # Type checking

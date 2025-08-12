@@ -46,7 +46,8 @@ class TestIntegration(unittest.TestCase):
 
         @self.dispatcher.handler("delete_user", role="admin", environment="production")
         def delete_user_admin_prod(params):
-            return f"Admin deleting user in production: {params.get('username', 'unknown')}"
+            username = params.get("username", "unknown")
+            return f"Admin deleting user in production: {username}"
 
         @self.dispatcher.handler("delete_user", role="admin", environment="staging")
         def delete_user_admin_staging(params):
@@ -107,11 +108,11 @@ class TestIntegration(unittest.TestCase):
             "debug_info", role="developer", environment="development"
         )
         def debug_info_dev(params):
-            return f"Debug info for developer in development"
+            return "Debug info for developer in development"
 
         @env_dispatcher.handler("debug_info", role="admin", environment="development")
         def debug_info_admin_dev(params):
-            return f"Debug info for admin in development"
+            return "Debug info for admin in development"
 
         dev_user = MockUser("developer", "development")
         admin_dev = MockUser("admin", "development")
@@ -279,7 +280,11 @@ class TestRealWorldScenarios(unittest.TestCase):
 
         @dispatcher.handler("get_users", role="user", api_version="v2")
         def get_users_user_v2(params):
-            return {"users": ["limited_users"], "version": "v2", "role": "user"}
+            return {
+                "users": ["limited_users"],
+                "version": "v2",
+                "role": "user",
+            }
 
         admin_v1 = MockUser("admin")
         admin_v1.api_version = "v1"

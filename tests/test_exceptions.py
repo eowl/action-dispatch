@@ -6,9 +6,9 @@ import unittest
 
 from action_dispatch.exceptions import (
     ActionDispatchError,
-    InvalidDimensionError,
     HandlerNotFoundError,
     InvalidActionError,
+    InvalidDimensionError,
 )
 
 

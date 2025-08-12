@@ -1,13 +1,13 @@
-from functools import partial
-from collections import defaultdict
 import warnings
-from typing import Any, Callable, Dict, List, Optional, Union
+from collections import defaultdict
+from functools import partial
+from typing import Any, Callable, Optional, Union
 
 try:
     from .exceptions import (
-        InvalidDimensionError,
         HandlerNotFoundError,
         InvalidActionError,
+        InvalidDimensionError,
     )
 except ImportError:
     pass
@@ -21,7 +21,8 @@ class ActionDispatcher:
     def __init__(self, dimensions: Optional[list[str]] = None) -> None:
         if dimensions is not None and not isinstance(dimensions, list):
             warnings.warn(
-                f"ActionDispatcher dimensions should be a list, got {type(dimensions).__name__}. Setting to empty list."
+                f"ActionDispatcher dimensions should be a list, got "
+                f"{type(dimensions).__name__}. Setting to empty list."
             )
             self.dimensions = []
         else:
@@ -44,10 +45,9 @@ class ActionDispatcher:
         def decorator_factory(
             dimensions: list[str],
         ) -> Callable[[str], Callable[..., Callable[..., Any]]]:
-            def decorator(
-                action: str, **scope_kwargs: Any
-            ) -> Callable[
-                [Callable[[dict[str, Any]], Any]], Callable[[dict[str, Any]], Any]
+            def decorator(action: str, **scope_kwargs: Any) -> Callable[
+                [Callable[[dict[str, Any]], Any]],
+                Callable[[dict[str, Any]], Any],
             ]:
                 def wrapper(
                     func: Callable[[dict[str, Any]], Any],

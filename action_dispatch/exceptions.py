@@ -12,7 +12,7 @@ class ActionDispatchError(Exception):
 class InvalidDimensionError(ActionDispatchError):
     """Raised when an invalid dimension parameter is provided."""
 
-    def __init__(self, dimension, available_dimensions):
+    def __init__(self, dimension: str, available_dimensions: list[str]) -> None:
         self.dimension = dimension
         self.available_dimensions = available_dimensions
         super().__init__(
@@ -24,7 +24,7 @@ class InvalidDimensionError(ActionDispatchError):
 class HandlerNotFoundError(ActionDispatchError):
     """Raised when no handler is found for a given action and rules."""
 
-    def __init__(self, action, rules):
+    def __init__(self, action: str, rules: dict[str, str]) -> None:
         self.action = action
         self.rules = rules
         super().__init__(f"No handler found for action '{action}' with rules {rules}")
@@ -33,5 +33,7 @@ class HandlerNotFoundError(ActionDispatchError):
 class InvalidActionError(ActionDispatchError):
     """Raised when an invalid action name is provided."""
 
-    def __init__(self, message="Action name must be provided for dispatching."):
+    def __init__(
+        self, message: str = "Action name must be provided for dispatching."
+    ) -> None:
         super().__init__(message)

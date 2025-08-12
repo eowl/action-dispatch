@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v6.0.0
     hooks:
       - id: check-yaml
       - id: end-of-file-fixer
@@ -10,26 +10,28 @@ repos:
       - id: check-json
 
   - repo: https://github.com/psf/black
-    rev: 23.3.0
+    rev: 25.1.0
     hooks:
       - id: black
         language_version: python3
 
   - repo: https://github.com/pycqa/flake8
-    rev: 6.0.0
+    rev: 7.3.0
     hooks:
       - id: flake8
         additional_dependencies: [flake8-docstrings]
+        args: ["--max-line-length=88", "--extend-ignore=E203,W503,D100,D101,D102,D104,D107,D200,D401"]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.3.0
+    rev: v1.17.1
     hooks:
       - id: mypy
-        additional_dependencies: [types-all]
+        additional_dependencies: [types-setuptools, types-requests]
         args: [--strict, --ignore-missing-imports]
+        exclude: ^tests/
 
   - repo: https://github.com/pycqa/isort
-    rev: 5.12.0
+    rev: 6.0.1
     hooks:
       - id: isort
         args: ["--profile", "black"]

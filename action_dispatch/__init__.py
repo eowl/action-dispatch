@@ -1,8 +1,7 @@
-"""
-Action Dispatch - A flexible action dispatching system with multi-dimensional routing capabilities.
+"""Action Dispatch - Multi-dimensional routing system.
 
-A powerful Python library that provides dynamic action dispatching based on context dimensions
-such as user roles, environments, API versions, and any custom attributes.
+A Python library providing dynamic action dispatching based on context
+dimensions like user roles, environments, API versions, and custom attributes.
 
 Key Features:
 - Multi-dimensional routing
@@ -33,9 +32,9 @@ Example:
 from .action_dispatcher import ActionDispatcher
 from .exceptions import (
     ActionDispatchError,
-    InvalidDimensionError,
     HandlerNotFoundError,
     InvalidActionError,
+    InvalidDimensionError,
 )
 
 __version__ = "0.1.0"

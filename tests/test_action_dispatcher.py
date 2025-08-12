@@ -8,9 +8,9 @@ from unittest.mock import Mock
 
 from action_dispatch import ActionDispatcher
 from action_dispatch.exceptions import (
-    InvalidDimensionError,
     HandlerNotFoundError,
     InvalidActionError,
+    InvalidDimensionError,
 )
 
 

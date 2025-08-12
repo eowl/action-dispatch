@@ -139,10 +139,10 @@ def test_feature_description(self):
     """Test that the feature works as expected."""
     # Arrange
     setup_test_data()
-    
+
     # Act
     result = perform_action()
-    
+
     # Assert
     self.assertEqual(result, expected_value)
 ```
