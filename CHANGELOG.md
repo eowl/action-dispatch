@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- (Add new features here before release)
+
+### Changed
+- (Add changes here before release)
+
+### Fixed
+- (Add bug fixes here before release)
+
+## [0.1.1] - 2025-08-12
+
+### Changed
+- Enhanced code quality and formatting (PEP8, type hints, black formatting)
+- Added pre-commit hooks for automated code quality checks
+- Simplified dependency management with uv
+- Streamlined requirements files structure
+- Improved development workflow and tooling
+
+### Fixed
+- Fixed flake8 and mypy compliance issues
+- Resolved line length and formatting inconsistencies
+
 ## [0.1.0] - 2025-07-20
 
 ### Added
@@ -40,5 +62,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Real-world examples for web APIs, microservices, and plugins
 - Development setup and contribution guidelines
 
-[Unreleased]: https://github.com/eowl/action-dispatch/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/eowl/action-dispatch/releases/tag/v1.0.0
+[Unreleased]: https://github.com/eowl/action-dispatch/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/eowl/action-dispatch/releases/tag/v0.1.1
+[0.1.0]: https://github.com/eowl/action-dispatch/releases/tag/v0.1.0
