@@ -61,6 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive test suite demonstrating usage patterns
 - Real-world examples for web APIs, microservices, and plugins
 - Development setup and contribution guidelines
+- Test
 
 [Unreleased]: https://github.com/eowl/action-dispatch/compare/v0.1.1...HEAD
 [0.1.1]: https://github.com/eowl/action-dispatch/releases/tag/v0.1.1
