@@ -3,6 +3,9 @@ from collections import defaultdict
 from functools import partial
 from typing import Any, Callable, Optional, Union
 
+from .mixins import CacheMixin
+from .mixins.cache import DEFAULT_CACHE_MAXSIZE
+
 try:
     from .exceptions import (
         HandlerNotFoundError,
@@ -13,12 +16,27 @@ except ImportError:
     pass
 
 
-class ActionDispatcher:
+class ActionDispatcher(CacheMixin):
+    """Action dispatcher with multi-dimensional routing and optional LRU cache."""
+
     dimensions: list[str]
     registry: dict[str, Any]
     global_handlers: dict[str, Callable[[dict[str, Any]], Any]]
 
-    def __init__(self, dimensions: Optional[list[str]] = None) -> None:
+    def __init__(
+        self,
+        dimensions: Optional[list[str]] = None,
+        enable_cache: bool = False,
+        cache_maxsize: int = DEFAULT_CACHE_MAXSIZE,
+    ) -> None:
+        """
+        Initialize ActionDispatcher.
+
+        Args:
+            dimensions: List of dimension names for routing.
+            enable_cache: Whether to enable LRU cache (default: False).
+            cache_maxsize: Maximum cache size (default: 256).
+        """
         if dimensions is not None and not isinstance(dimensions, list):
             warnings.warn(
                 f"ActionDispatcher dimensions should be a list, got "
@@ -30,6 +48,9 @@ class ActionDispatcher:
 
         self.registry = self._create_nested_dict(len(self.dimensions))
         self.global_handlers = {}
+
+        # Initialize cache from mixin
+        self._init_cache(enable_cache, cache_maxsize)
 
         self._create_dynamic_methods()
 
@@ -116,9 +137,19 @@ class ActionDispatcher:
 
         current_level[action] = handler
 
+        # Invalidate cache when new handler is registered
+        self._invalidate_cache()
+
     def _find_handler(
         self, action: str, scope_kwargs: dict[str, Any]
     ) -> Optional[Callable[[dict[str, Any]], Any]]:
+        """Find handler (delegates to cache mixin)."""
+        return self._find_handler_with_cache(action, scope_kwargs)
+
+    def _match_handler(
+        self, action: str, scope_kwargs: dict[str, Any]
+    ) -> Optional[Callable[[dict[str, Any]], Any]]:
+        """Match handler based on action and scope dimensions."""
         if action in self.global_handlers:
             return self.global_handlers[action]
         if not self.dimensions:
@@ -148,7 +179,11 @@ class ActionDispatcher:
     def register_global(
         self, action: str, handler: Callable[[dict[str, Any]], Any]
     ) -> None:
+        """Register a global handler for an action."""
         self.global_handlers[action] = handler
+
+        # Invalidate cache when global handler is registered
+        self._invalidate_cache()
 
     def global_handler(
         self, action: str

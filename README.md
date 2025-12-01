@@ -114,6 +114,62 @@ except InvalidDimensionError as e:
     print(f"Available dimensions: {e.available_dimensions}")
 ```
 
+### Caching for Performance
+
+Enable LRU caching to improve performance when you have many dimensions or high-frequency lookups with repeated action + scope combinations.
+
+```python
+# Enable cache on initialization
+dispatcher = ActionDispatcher(
+    dimensions=['region', 'platform', 'version', 'tier'],
+    enable_cache=True,
+    cache_maxsize=512
+)
+
+@dispatcher.handler("get_data", region="asia", platform="mobile")
+def get_data_asia_mobile(params):
+    return "data for asia mobile"
+
+# First lookup - cache miss
+result = dispatcher.get_handler("get_data", region="asia", platform="mobile")
+
+# Second lookup - cache hit (faster)
+result = dispatcher.get_handler("get_data", region="asia", platform="mobile")
+
+# Check cache statistics
+info = dispatcher.cache_info()
+print(f"Cache hits: {info['hits']}, misses: {info['misses']}")
+# Output: Cache hits: 1, misses: 1
+```
+
+#### Runtime Cache Control
+
+```python
+# Create dispatcher without cache
+dispatcher = ActionDispatcher(dimensions=['platform'])
+
+# Enable cache later
+dispatcher.enable_cache(maxsize=256)
+print(dispatcher.is_cache_enabled)  # True
+
+# Clear cache manually (useful after bulk handler registration)
+dispatcher.clear_cache()
+
+# Disable cache when no longer needed
+dispatcher.disable_cache()
+print(dispatcher.is_cache_enabled)  # False
+```
+
+#### When to Use Caching
+
+| Scenario | Recommendation |
+|----------|----------------|
+| 2-5 dimensions | Cache optional |
+| 5-10 dimensions | Consider enabling cache |
+| 10+ dimensions | Recommend enabling cache |
+| High QPS (>10K) | Recommend enabling cache |
+| Dynamic handler registration | Cache auto-invalidates on registration |
+
 ## Real-World Examples
 
 ### Web API with Role-Based Access Control
@@ -195,10 +251,12 @@ result = plugin_dispatcher.dispatch(context, "transform_data", data=input_data)
 
 ### ActionDispatcher
 
-#### `__init__(dimensions=None)`
-Create a new dispatcher with optional dimensions.
+#### `__init__(dimensions=None, enable_cache=False, cache_maxsize=256)`
+Create a new dispatcher with optional dimensions and caching.
 
 - `dimensions` (list, optional): List of dimension names for routing
+- `enable_cache` (bool, optional): Enable LRU cache for handler lookups (default: False)
+- `cache_maxsize` (int, optional): Maximum size of the LRU cache (default: 256)
 
 #### `@handler(action, **kwargs)`
 Decorator to register a handler for specific action and dimensions.
@@ -224,6 +282,31 @@ Dispatch an action based on context.
 - `context_object`: Object with dimension attributes
 - `action_name` (str): Action to dispatch
 - `**kwargs`: Additional parameters passed to handler
+
+#### Cache Methods
+
+##### `enable_cache(maxsize=None)`
+Enable LRU cache for handler lookups at runtime.
+
+- `maxsize` (int, optional): Maximum cache size (uses existing value if None)
+
+##### `disable_cache()`
+Disable cache and clear cached data.
+
+##### `clear_cache()`
+Clear all cached handler lookups.
+
+##### `cache_info()`
+Get cache statistics. Returns `None` if cache is disabled.
+
+Returns a dict with:
+- `hits`: Number of cache hits
+- `misses`: Number of cache misses
+- `maxsize`: Maximum cache size
+- `currsize`: Current number of cached items
+
+##### `is_cache_enabled`
+Property that returns `True` if cache is currently enabled.
 
 ### Exceptions
 

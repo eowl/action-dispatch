@@ -36,6 +36,7 @@ from .exceptions import (
     InvalidActionError,
     InvalidDimensionError,
 )
+from .mixins import CacheMixin
 
 __version__ = "0.1.1"
 __author__ = "Eowl"
@@ -43,6 +44,7 @@ __email__ = "eowl@me.com"
 
 __all__ = [
     "ActionDispatcher",
+    "CacheMixin",
     "ActionDispatchError",
     "InvalidDimensionError",
     "HandlerNotFoundError",
